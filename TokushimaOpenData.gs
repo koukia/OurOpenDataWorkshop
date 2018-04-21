@@ -1,5 +1,5 @@
-var CHANNEL_ACCESS_TOKEN = "R5ybQODMqeBUs9+zVizzWAIMmBFuQzzgwYshDLjGK9wP93SjCUWLaQ6cBtci4cuGo2mpFZsaDrHLiq+THiO53Qra7G+BBIpb2e/NGlkKIDVnOScc/TgeH4sf5kqp6rWZUeyyouiyQG4rb+7z3cNIMwdB04t89/1O/w1cDnyilFU=";
-var FILE_NAME = "指定避難所_登録データ一覧_2018年04月14日_00時22分.csv";
+var CHANNEL_ACCESS_TOKEN = "ここにアクセストークンをコピペ";
+var FILE_NAME = "refuge.csv";
 
 var TITLE_COLUMN_NUM = 1;
 var ADDRESS_COLUMN_NUM = 2;
