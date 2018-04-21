@@ -1,8 +1,8 @@
 var CHANNEL_ACCESS_TOKEN = "ここにアクセストークンをコピペ";
 var FILE_NAME = "data.csv";
 
-var TITLE_COLUMN_NUM = 1;
-var ADDRESS_COLUMN_NUM = 2;
+var TITLE_COLUMN_NUM = 0;
+var ADDRESS_COLUMN_NUM = 1;
 
 
 function doPost(e) {
@@ -50,7 +50,7 @@ function extract_spot(address){
         if(cnt >= cnt_max)
           break;
       }
-      //Logger.log(i+" 番目 palce:"+csv[i][TITLE_COLUMN_NUM]+" address:"+csv[i][ADDRESS_COLUMN_NUM]);
+      Logger.log(i+" 番目 palce:"+csv[i][TITLE_COLUMN_NUM]+" address:"+csv[i][ADDRESS_COLUMN_NUM]);
     }
     if(cnt >= cnt_max)
       break;
