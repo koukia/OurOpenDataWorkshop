@@ -1,5 +1,5 @@
 var CHANNEL_ACCESS_TOKEN = "ここにアクセストークンをコピペ";
-var FILE_NAME = "refuge.csv";
+var FILE_NAME = "data.csv";
 
 var TITLE_COLUMN_NUM = 1;
 var ADDRESS_COLUMN_NUM = 2;
