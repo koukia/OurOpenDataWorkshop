@@ -3,6 +3,8 @@ var FILE_NAME = "data.csv";
 
 var TITLE_COLUMN_NUM = 0;
 var ADDRESS_COLUMN_NUM = 1;
+var LAT_COLUMN_NUM = 2;
+var LNG_COLUMN_NUM = 3;
 
 
 function doPost(e) {
@@ -21,6 +23,17 @@ function doPost(e) {
           reply_carousel(events[i].replyToken, result);
         }
       }
+    }else if(events[i].type == "postback"){
+//      var toString = Object.prototype.toString;
+//      reply_text(events[i].replyToken, toString.call(events[i].postback.data));
+      var str_postback = events[i].postback.data.split("&");
+      
+      var title = str_postback[1].split("=")[1];
+      var address = str_postback[2].split("=")[1];
+      var lat = str_postback[3].split("=")[1];
+      var lng = str_postback[4].split("=")[1];
+//      reply_text(events[i].replyToken, title+address+lat+lng);
+      reply_position(events[i].replyToken, title, address, lat, lng);
     }
   }
 }
@@ -30,7 +43,7 @@ function extract_spot(address){
   var files = DriveApp.getFilesByName(FILE_NAME);
   var results = [];
   var cnt = 0;
-  var cnt_max = 3;//検索する住所の件数の上限.カルーセルで返せる件数の上限は5.
+  var cnt_max = 5;//検索する住所の件数の上限.カルーセルで返せる件数の上限は5.
   
   while (files.hasNext()) {
     var file = files.next();
@@ -45,9 +58,11 @@ function extract_spot(address){
       var regexp = new RegExp(address);//正規表現:住所(文字列)が含まれているか否か.
       var open_data_title = csv[i][TITLE_COLUMN_NUM];
       var open_data_address = csv[i][ADDRESS_COLUMN_NUM];
+      var lat = csv[i][LAT_COLUMN_NUM];
+      var lng = csv[i][LNG_COLUMN_NUM];
       
       if (open_data_address.match(regexp)){//もし住所の項目の中にLINEでの入力値が含まれていれば.
-        results.push({title:open_data_title, address:open_data_address});
+        results.push({title:open_data_title, address:open_data_address, lat:lat, lng:lng});
         cnt += 1;
         if(cnt >= cnt_max)
           break;
@@ -105,15 +120,16 @@ function reply_carousel(replyToken, messages) {
         "title": messages[i]["title"],
         "text": "参照:"+FILE_NAME,//最大120文字
         "actions": [
-//          {
-//            "type": "postback",
-//            "label": "Buy",
-//            "data": "action=buy&itemid=111"
-//          },
+         {
+           "type": "postback",
+           "label": "位置情報",
+           "data": "action=position&title="+messages[i]["title"]+"&address="+messages[i]["address"]+
+            "&lat="+messages[i]["lat"]+"&lng="+messages[i]["lng"]
+         },
           {
             "type": "uri",
-            "label": "住所を見る",
-            "uri": "https://www.google.co.jp/search?q="+messages[i]["address"]
+            "label": "検索する",
+            "uri": "https://www.google.co.jp/search?q="+messages[i]["title"]
           },{
             "type": "uri",
             "label": "オープンデータを探す",
@@ -133,4 +149,29 @@ function reply_carousel(replyToken, messages) {
     "payload" : JSON.stringify(postData)// JSON 文字列に変換
   };
   UrlFetchApp.fetch("https://api.line.me/v2/bot/message/reply", options);//POSTリクエスト
+}
+
+//位置情報として返す.
+function reply_position(replyToken, title, address, lat, lng) {
+  var postData = {
+    "replyToken" : replyToken,
+    "messages" : [
+      {
+        "type": "location",
+        "title": title,
+        "address": address,
+        "latitude": lat,
+        "longitude": lng
+      }
+    ]
+  };
+  var options = {
+    "method" : "post",
+    "headers" : {
+      "Content-Type" : "application/json",
+      "Authorization" : "Bearer " + CHANNEL_ACCESS_TOKEN
+    },
+    "payload" : JSON.stringify(postData)
+  };
+  UrlFetchApp.fetch("https://api.line.me/v2/bot/message/reply", options);
 }
