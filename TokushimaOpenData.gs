@@ -24,15 +24,12 @@ function doPost(e) {
         }
       }
     }else if(events[i].type == "postback"){
-//      var toString = Object.prototype.toString;
-//      reply_text(events[i].replyToken, toString.call(events[i].postback.data));
       var str_postback = events[i].postback.data.split("&");
       
       var title = str_postback[1].split("=")[1];
       var address = str_postback[2].split("=")[1];
       var lat = str_postback[3].split("=")[1];
       var lng = str_postback[4].split("=")[1];
-//      reply_text(events[i].replyToken, title+address+lat+lng);
       reply_position(events[i].replyToken, title, address, lat, lng);
     }
   }
