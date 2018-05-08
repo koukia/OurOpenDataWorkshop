@@ -148,27 +148,11 @@ function reply_carousel(replyToken, messages) {
   UrlFetchApp.fetch("https://api.line.me/v2/bot/message/reply", options);//POSTリクエスト
 }
 
-//位置情報として返す.
 function reply_position(replyToken, title, address, lat, lng) {
-  var postData = {
-    "replyToken" : replyToken,
-    "messages" : [
-      {
-        "type": "location",
-        "title": title,
-        "address": address,
-        "latitude": lat,
-        "longitude": lng
-      }
-    ]
-  };
-  var options = {
-    "method" : "post",
-    "headers" : {
-      "Content-Type" : "application/json",
-      "Authorization" : "Bearer " + CHANNEL_ACCESS_TOKEN
-    },
-    "payload" : JSON.stringify(postData)
-  };
-  UrlFetchApp.fetch("https://api.line.me/v2/bot/message/reply", options);
+  /*
+    [未実装] :位置情報メッセージを返す処理.
+    テキストを返す処理(reply_text関数)などと同様にAPIのエンドポイントに
+    JSONデータをPOSTで送る.メッセージオブジェクトの内容だけが異なる.
+    参照：https://developers.line.me/ja/docs/messaging-api/reference/#anchor-716b36bc6d60a12efa5b63a8569f53e29f19efed
+  */
 }
